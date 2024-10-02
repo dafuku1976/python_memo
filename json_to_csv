@@ -1,0 +1,39 @@
+import json
+import csv
+
+# JSONファイルのパス
+json_file_path = 'revisio1001.json'
+# 出力するCSVファイルのパス
+csv_file_path = 'output1001.csv'
+
+# JSONファイルを読み込む
+with open(json_file_path, 'r', encoding='utf-8') as json_file:
+    data = json.load(json_file)
+
+# CSVファイルに書き込む
+with open(csv_file_path, 'w', newline='', encoding='utf-8') as csv_file:
+    # ヘッダーを定義（キーのリスト）
+    header = [
+        "PROGRAM_NAME",
+        "BROADCASTER_ID",
+        "BROADCASTER_NAME",
+        "PROGRAM_STARTED_AT",
+        "DISPLAY_STARTED_AT",
+        "PROGRAM_ENDED_AT",
+        "DISPLAY_ENDED_AT",
+        "DISPLAY_PROGRAM_BROADCASTED_DATE_29H",
+        "WATCHING_RATE_JUMP",
+        "ATTENTION_VALUE_RATE",
+        "BROADCASTER_CHANNEL"
+    ]
+
+    writer = csv.DictWriter(csv_file, fieldnames=header)
+
+    # ヘッダーを書き込む
+    writer.writeheader()
+
+    # データを書き込む
+    for row in data:
+        writer.writerow(row)
+
+print(f'Converted {json_file_path} to {csv_file_path}')
