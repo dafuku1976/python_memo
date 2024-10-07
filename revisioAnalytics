@@ -1,0 +1,52 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# CSVファイルを読み込む
+df = pd.read_csv('revdata.csv')
+
+# データの確認
+print(df.head())
+
+# 散布図の作成
+plt.figure(figsize=(10, 6))
+plt.scatter(df['注目度'], df['視聴率'], color='blue')
+plt.xlabel('注目度 (%)')
+plt.ylabel('視聴率 (%)')
+plt.title('注目度と視聴率の関係')
+plt.show()
+
+# 相関係数の計算
+correlation = df[['注目度', '視聴率']].corr().iloc[0, 1]
+print("相関係数:", correlation)
+
+# 単回帰分析
+X = df[['注目度']]
+y = df['視聴率']
+
+model = LinearRegression()
+model.fit(X, y)
+
+# 回帰直線のプロット
+plt.figure(figsize=(10, 6))
+plt.scatter(X, y, color='blue', label='データポイント')
+plt.plot(X, model.predict(X), color='red', label='回帰直線')
+plt.xlabel('注目度 (%)')
+plt.ylabel('視聴率 (%)')
+plt.title('注目度と視聴率の回帰分析')
+plt.legend()
+plt.show()
+
+# 残差分析
+y_pred = model.predict(X)
+residuals = y - y_pred
+
+plt.figure(figsize=(10, 6))
+plt.scatter(X, residuals)
+plt.axhline(0, color='red', linestyle='--')
+plt.xlabel('注目度 (%)')
+plt.ylabel('残差')
+plt.title('残差分析')
+plt.show()
