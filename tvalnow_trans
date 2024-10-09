@@ -1,0 +1,25 @@
+import pandas as pd
+import json
+
+# JSONファイルを読み込む
+with open('per-minute_241008.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+
+# 必要なデータを抽出
+timestamps = data['timestampList']  # 時刻情報のリスト
+stations = data['stations']  # 局の情報（stationCodeやviewingRateListを含む）
+
+# 駅コードとその視聴率を格納する辞書を作成
+station_data = {}
+
+for station in stations:
+    station_code = station['stationCode']  # 放送局のコード
+    viewing_rates = station['viewingRateList']  # 視聴率リスト
+    station_data[station_code] = viewing_rates  # 駅コードをキーとして視聴率リストを格納
+
+# DataFrameを作成
+df = pd.DataFrame(station_data, index=timestamps)
+
+# CSVに出力
+df.to_csv('viewing_rate_output.csv', index_label='Timestamp')
+print("CSVファイルを出力しました：")
